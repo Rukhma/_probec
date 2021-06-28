@@ -4,6 +4,7 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from probec_main.models import Product
+from .utils import get_plot,search_file
 
 # Create your views here.
 
@@ -77,10 +78,23 @@ def search(request):
   return render(request, 'productresearch.html', {'products' :filtered_pro, 'record': record, 'average_sales':average_sales, 'average_price':average_price, 'average_reviews':average_reviews})
 
 
-def keyword_research(request):
+
+#searching for product tracking
+def searchptrack(request):
+    asins = request.GET.get('asins')
+    pasins=search_file(asins)
+    if pasins==0:
+        record= 'Record not found'
+        return render(request, 'product_tracking.html',{'record':record})
+    else:
+        x=pasins
+        chart=get_plot(x)
+        return render(request, 'product_tracking.html',{'chart':chart})
+
+def product_tracking(request):
     if request.session.has_key('username'):
       username = request.session['username']
-      return render(request, 'keyword_research.html')
+      return render(request, 'product_tracking.html')
     else:
       messages.warning(request,"Please Sign in first")
       return render(request,'signin.html')
