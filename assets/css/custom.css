@@ -193,3 +193,17 @@ body {
 input[type=number] {
     width: 100%;
 }
+
+.edge-item{
+    border-top-left-radius: 0rem;
+    border-bottom-left-radius: 0rem;
+}
+
+.pagination_text{
+    color: black;
+}
+
+#pagination_active{
+    background-color: grey;
+    color: white;
+}
