@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'firstproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'probec-db',
+        'NAME': 'probecdb',
         'USER' : 'root',
         'PASSWORD' : '',
         'HOST' : 'localhost',

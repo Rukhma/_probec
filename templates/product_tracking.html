@@ -89,19 +89,26 @@
                     <input name="asins" id="asins" class="form-control mb-3" type="text" placeholder="Product ASIN" aria-label="default input example">
                     <button type="submit" class="btn btn-success mt-3 mb-0">Track Product</button>
                 </form>
-                
-                {% block content%}
-                  {% if chart %}
-                    <img src="data:image/png;base64,{{chart|safe}}">
-                  {% endif %}
-                {% endblock content%}
 
-                <p>{{ record }}</p>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12 col-md-12">
+                        {% block content_s%}
+                        {% if sales_chart %}
+                            <img src="data:image/png;base64,{{sales_chart|safe}}">
+                        {% endif %}
+                        {% endblock content_s%}</div>
+                    <div class="col-lg-6 col-sm-12 col-md-12">
+                        {% block content_r%}
+                          {% if ratings_chart %}
+                            <img src="data:image/png;base64,{{ratings_chart|safe}}">
+                          {% endif %}
+                        {% endblock content_r%}
+                    </div>
+                    <p>{{ record }}</p>
+                </div>
 
             </div>
-
         </div>
-
     </div>
 
     <!-- JavaScript files-->

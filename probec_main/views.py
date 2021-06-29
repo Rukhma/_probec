@@ -2,11 +2,8 @@ import csv
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from probec_main.models import Product
-<<<<<<< HEAD
-from .utils import get_plot,search_file
-=======
+from .utils import get_sales_plot, get_reviews_plot, search_reviews,search_file
 from django.core.paginator import Paginator 
->>>>>>> 56010a8120d3d26da40c57091b2a4a5f5387cb3d
 
 # Create your views here.
 
@@ -72,7 +69,7 @@ def search(request):
   context = {
       'count' : pro_paginator.count,
       'page' : page,
-      'products' :filtered_pro, 
+      #'products' :filtered_pro, 
       'record': record, 
       'average_sales':round(average_sales, 3), 
       'average_price':round(average_price,3), 
@@ -85,15 +82,26 @@ def search(request):
 
 #searching for product tracking
 def searchptrack(request):
-    asins = request.GET.get('asins')
-    pasins=search_file(asins)
-    if pasins==0:
-        record= 'Record not found'
-        return render(request, 'product_tracking.html',{'record':record})
-    else:
-        x=pasins
-        chart=get_plot(x)
-        return render(request, 'product_tracking.html',{'chart':chart})
+
+  record=''
+  asins = request.GET.get('asins')
+  pasins=search_file(asins)
+  if pasins==0:
+      record= 'ASIN record not found'
+      return render(request, 'product_tracking.html',{'record':record})
+  else:
+      x=pasins
+      sales_chart=get_sales_plot(x)
+
+  pasins=search_reviews(asins)
+  if pasins==0:
+      record= 'Reviews record not found'
+      return render(request, 'product_tracking.html',{'record':record, 'sales_chart': sales_chart})
+  else:
+    x=pasins
+    reviews_chart= get_reviews_plot(x)
+  
+  return render(request, 'product_tracking.html',{'ratings_chart': reviews_chart, 'sales_chart': sales_chart})
 
 def product_tracking(request):
     if request.session.has_key('username'):
