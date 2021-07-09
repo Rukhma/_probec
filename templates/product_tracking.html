@@ -90,27 +90,51 @@
                     <button type="submit" class="btn btn-success mt-3 mb-0">Track Product</button>
                 </form>
 
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12 col-md-12">
-                        {% block content_s%}
-                        {% if sales_chart %}
-                            <img src="data:image/png;base64,{{sales_chart|safe}}">
-                        {% endif %}
-                        {% endblock content_s%}</div>
-                    <div class="col-lg-6 col-sm-12 col-md-12">
-                        {% block content_r%}
-                          {% if ratings_chart %}
-                            <img src="data:image/png;base64,{{ratings_chart|safe}}">
-                          {% endif %}
-                        {% endblock content_r%}
-                    </div>
-                    <p>{{ record }}</p>
+                {%if sales_chart %}
+                <table class="table mt-3">
+                    <tr>
+                        <td>
+                            <h6>Name:</h6>
+                            <span>{{ pro_name }}</span>
+                        </td>
+                        <td>
+                            <h6>Category</h6>
+                            <span>{{ category }}</span>
+                        </td>
+                        <td>
+                            <h6>Brand</h6>
+                            <span>{{ brand }}</span>
+                        </td>
+                        <td>
+                            <h6>Price</h6>
+                            <span>{{ price }}</span>
+                        </td>
+                    </tr>
+                </table>
+                
+                <h6>Sales</h6>
+                <div>
+                    {% autoescape off %}
+                    {{ sales_chart }}
+                    {% endautoescape %}
                 </div>
+                {% endif %}
+                <p>{{ sales_record }}</p>
 
+                
+                {% if review_chart %}
+                <h6>Reviews</h6>
+                <div>
+                    {% autoescape off %}
+                    {{ review_chart }}
+                    {% endautoescape %}
+                </div>
+                {% endif %}
+                <p>{{ review_record }}</p>
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- JavaScript files-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/popper.js/umd/popper.min.js' %}">

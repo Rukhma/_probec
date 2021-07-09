@@ -2,12 +2,15 @@ from django.urls import path
 
 from . import views
 
+app_name= 'pro_research'
+
 urlpatterns=[
-    path('dashboard',views.dashboard),
-    path('product_research',views.product_research),
-    path('product_tracking',views.product_tracking),
-    path('comaprison',views.comaprison),
-    path('search',views.search),
-    path('searchptrack',views.searchptrack)
+    path('dashboard',views.dashboard, name='dashboard'),
+    path('product_research',views.product_research, name='product_research'),
+    path('product_tracking',views.product_tracking, name='product_tracking'),
+    path('comaprison',views.comaprison, name='comparison'),
+    path('search',views.search, name='search'),
+    path('searchptrack',views.searchptrack, name='searchptrack'),
+    path('plot_graph',views.plot_graph, name='plot_graph'),
 ]
 

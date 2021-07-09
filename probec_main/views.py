@@ -1,9 +1,11 @@
 import csv
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib import messages
 from probec_main.models import Product
-from .utils import get_sales_plot, get_reviews_plot, search_reviews,search_file
+from .utils import get_reviews_plot, search_reviews,search_file, make_graph, make_graph_c
 from django.core.paginator import Paginator 
+from plotly.offline import plot
 
 # Create your views here.
 
@@ -17,6 +19,9 @@ def dashboard(request):
     return render(request,'signin.html')
 
 
+
+
+
 def product_research(request):
 
     if request.session.has_key('username'):
@@ -24,10 +29,12 @@ def product_research(request):
       average_sales=0.0
       average_price=0.0
       average_revenue =0.0
-      return render(request, 'productresearch.html', {'average_sales':average_sales, 'average_price':average_price})
+      return render(request, 'productresearch.html', {'average_sales':average_sales, 'average_price':average_price, 'average_revenue':average_revenue})
     else:
       messages.warning(request,"Please Sign in first")
       return render(request,'signin.html')
+
+
 
 
 def search(request):
@@ -55,7 +62,7 @@ def search(request):
       average_price += float(item.price)
       average_revenue += float(item.revenue) 
   
-  pro_paginator = Paginator(filtered_pro, 7)
+  pro_paginator = Paginator(filtered_pro, 5)
   page_num =  request.GET.get('page') if not  request.GET.get('page') == '' else 1 
   page = pro_paginator.get_page(page_num)
 
@@ -69,7 +76,6 @@ def search(request):
   context = {
       'count' : pro_paginator.count,
       'page' : page,
-      #'products' :filtered_pro, 
       'record': record, 
       'average_sales':round(average_sales, 3), 
       'average_price':round(average_price,3), 
@@ -80,28 +86,51 @@ def search(request):
 
 
 
-#searching for product tracking
+
 def searchptrack(request):
 
-  record=''
+  sales_record=''
+  review_record=''
+  layout = {
+        'title': 'Title of the figure',
+        'xaxis_title': 'X',
+        'yaxis_title': 'Y',
+        'height': 420,
+        'width': 560
+      }
   asins = request.GET.get('asins')
   pasins=search_file(asins)
   if pasins==0:
-      record= 'ASIN record not found'
-      return render(request, 'product_tracking.html',{'record':record})
+      sales_record= 'ASIN record not found'
   else:
       x=pasins
-      sales_chart=get_sales_plot(x)
-
+      sales_chart=make_graph(x)
+      plot_div = plot({'data': sales_chart['fig'], 'layout': layout}, output_type='div')
+        
   pasins=search_reviews(asins)
   if pasins==0:
-      record= 'Reviews record not found'
-      return render(request, 'product_tracking.html',{'record':record, 'sales_chart': sales_chart})
+      review_record= 'Reviews record not found'
+      plot_r_div =None
   else:
     x=pasins
     reviews_chart= get_reviews_plot(x)
+    plot_r_div = plot({'data': reviews_chart, 'layout': layout}, output_type='div')
+
+  data={
+    'sales_record':sales_record, 
+    'review_record':review_record, 
+    'sales_chart': plot_div, 
+    'review_chart': plot_r_div,
+    'pro_name': sales_chart['name'],
+    'category': sales_chart['category'],
+    'price': sales_chart['price'],
+    'brand': sales_chart['brand']
+  }  
   
-  return render(request, 'product_tracking.html',{'ratings_chart': reviews_chart, 'sales_chart': sales_chart})
+  return render(request, 'product_tracking.html',data)
+
+
+
 
 def product_tracking(request):
     if request.session.has_key('username'):
@@ -112,6 +141,10 @@ def product_tracking(request):
       return render(request,'signin.html')
 
 
+
+
+
+
 def comaprison(request):
     if request.session.has_key('username'):
       username = request.session['username']
@@ -120,3 +153,24 @@ def comaprison(request):
       messages.warning(request,"Please Sign in first")
       return render(request,'signin.html')
 
+
+
+def plot_graph(request):
+
+  sales_record=''
+  layout = {
+        'title': 'Title of the figure',
+        'xaxis_title': 'X',
+        'yaxis_title': 'Y',
+        'height': 420,
+        'width': 560
+      }
+  asins = request.GET.get('asins')
+  pasins=search_file(asins)
+  if pasins==0:
+      sales_record= 'ASIN record not found'
+  else:
+      x=pasins
+      sales_chart=make_graph_c(x)
+      plot_div = plot({'data': sales_chart['fig'], 'layout': layout}, output_type='div')
+  return JsonResponse({'result': plot_div, 'name': sales_chart['name'],'record':sales_record}, safe=False)

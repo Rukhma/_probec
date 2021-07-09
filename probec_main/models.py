@@ -14,4 +14,5 @@ class Product(models.Model):
     class Meta:
         ordering = ['-sales']
 
+
    
