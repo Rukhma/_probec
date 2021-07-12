@@ -100,7 +100,7 @@ body {
     text-decoration: underline;
 }
 
-.card {
+.toast-custom {
     background-color: #dee2e6;
     border: none;
     -webkit-box-shadow: 0 0.125rem 0.8rem rgba(0, 0, 0, 0.1);

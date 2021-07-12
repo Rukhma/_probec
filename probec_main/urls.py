@@ -12,5 +12,7 @@ urlpatterns=[
     path('search',views.search, name='search'),
     path('searchptrack',views.searchptrack, name='searchptrack'),
     path('plot_graph',views.plot_graph, name='plot_graph'),
+    path('market_analysis', views.market_analysis, name="market_analysis"),
+    path('select_analysis',views.select_analysis, name='select_analysis')
 ]
 

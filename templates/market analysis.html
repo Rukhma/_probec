@@ -1,0 +1,173 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Probec - Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="{% static 'https://use.fontawesome.com/releases/v5.3.1/css/all.css' %}" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!-- Google fonts - Popppins for copy-->
+    <link rel="stylesheet" href="{% static 'https://fonts.googleapis.com/css?family=Poppins:300,400,800' %}">
+    <!-- orion icons-->
+    <link rel="stylesheet" href="{% static 'css/orionicons.css' %}">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{% static 'css/style.default.css' %}" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <!-- Font awesome-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
+</head>
+
+<body>
+    <!-- navbar-->
+
+    <div class="d-flex align-items-stretch">
+        <div id="sidebar" class="sidebar shrink show py-3" style="height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;">
+            <ul class="sidebar-menu list-unstyled">
+                <li class="sidebar-list-item d-flex justify-content-start"><a href="#" id="pd-menu" class=" text-gray-500 ml-3 mr-lg-5 lead"><i class="fa fa-align-left"></i></a></li>
+                <li class="sidebar-list-item">
+                    <a href="dashboard" class="sidebar-link text-muted"><img src="{% static 'img/homepage.png' %}" alt="" class="mr-3" width="30" height="30"><span>Dashboard</span></a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="market_analysis" class="sidebar-link text-muted active"><img src="{% static 'img/icons8-total-sales-50.png' %}" alt="" class="mr-3" width="30" height="30"><span>Market Analysis</span></a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="product_research" class="sidebar-link text-muted "><img src="{% static 'img/magnifying-glass.png' %}" alt="" class="mr-3" width="30" height="30"><span>Product Research</span></a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="product_tracking" class="sidebar-link text-muted"><img src="{% static 'img/delivery.png' %}" alt="" class="mr-3" width="30" height="30"></i><span>Product Tracking</span></a>
+                </li>
+
+                <li class="sidebar-list-item">
+                    <a href="comaprison" class="sidebar-link text-muted"><img src="{% static 'img/comparison.png' %}" alt="" class="mr-3" width="30" height="30"><span>Comparison </span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-holder w-100 d-flex flex-wrap" style="margin-left: 7rem;">
+            <header class="header w-100" style="height:fit-content;">
+                <nav class=" navbar px-4 py-2 bg-white shadow ">
+                    <a href="dashboard " class="navbar-brand "> <img src="{% static 'img/PROBEC.png' %} " alt=" " class="img-fluid logo " width="103 " height="76 "></a>
+                    <ul class="ml-auto d-flex align-items-center list-unstyled mb-0 ">
+                        <li class="nav-item dropdown ml-auto">
+                            <a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="{% static 'img/user icon.png' %}" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
+                            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ request.session.username }}</strong></a>
+                                <div class="dropdown-divider"></div><a href="signin" class="dropdown-item">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div class="container-fluid w-100 px-xl-5 pt-0">
+                <h5 class="pb-4 pt-3">Market Analysis</h5>
+                <form method="GET" action="select_analysis">
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1">
+                            <p class="h5 align-content-end">Top 10</p>
+                        </div>
+                        <div class="col-lg-11 col-md-11 col-sm-11">
+                            <select name="options" class="form-select" aria-label="Default select example">
+                            <option selected>Select options</option>
+                            <option value="categories">Categories</option>
+                            <option value="products">Products</option>
+                            <option value="brands">Brands</option>
+                          </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3 mb-0">Get Results</button>
+                </form>
+                {% if option %}
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped sortable" style="width:100%" ">
+                                <thead>
+                                    <tr>
+                                        {% if option in "categories " %}
+                                        <th scope="col ">Category Name</th>
+                                        <th scope="col ">Sales</th>
+                                        <th scope="col ">No. of Products</th>
+                                        <th scope="col ">No. of Brands</th>
+                                        {% endif %}
+
+                                        {% if option in "products " %}
+                                        <th scope="col ">Product Name</th>
+                                        <th scope="col ">Sales</th>
+                                        {% endif %}
+
+                                        {% if option in "brands " %}
+                                        <th scope="col ">Brand Name</th>
+                                        <th scope="col ">Sales</th>
+                                        <th scope="col ">No. of Products</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+
+                                {% if option in "categories " %}
+                                <tbody>
+                                    {% for row in result %}
+                                    <tr>
+                                        <td scope="col ">{{ row.categories  }}</td>
+                                        <td scope="col ">{{ row.sales_sum}}</td>
+                                        <td scope="col ">{{ row.pro_count}}</td>
+                                        <td scope="col ">{{ row.brand_count}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                {% endif %}
+
+                                {% if option in "products " %}
+                                <tbody>
+                                    {% for row in result %}
+                                    <tr>
+                                        <td scope="col ">{{ row.name  }}</td>
+                                        <td scope="col ">{{ row.sales_sum}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                {% endif %}
+
+                                {% if option in "brands " %}
+                                <tbody>
+                                    {% for row in result %}
+                                    <tr>
+                                        <td scope="col ">{{ row.brand }}</td>
+                                        <td scope="col ">{{ row.sales_sum}}</td>
+                                        <td scope="col ">{{ row.pro_count}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                {% endif %}
+                            </table>
+                        </div>
+                </div>       
+            </div>       
+            {% endif %}
+            </div>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js "></script>
+    <!-- JavaScript files-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js " integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM " crossorigin="anonymous "></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js " integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js " integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF " crossorigin="anonymous "></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %} "></script>
+    <script src="{% static 'vendor/popper.js/umd/popper.min.js' %} ">
+    </script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %} "></script>
+    <script src="{% static 'vendor/jquery.cookie/jquery.cookie.js' %} ">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js "></script>
+    <script src="{% static 'js/front.js' %} "></script>
+</body>
+
+</html>

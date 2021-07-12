@@ -57,6 +57,9 @@
                     <a href="dashboard" class="sidebar-link text-muted"><img src="{% static 'img/homepage.png' %}" alt="" class="mr-3" width="30" height="30"><span>Dashboard</span></a>
                 </li>
                 <li class="sidebar-list-item">
+                    <a href="market_analysis" class="sidebar-link text-muted"><img src="{% static 'img/icons8-total-sales-50.png' %}" alt="" class="mr-3" width="30" height="30"><span>Market Analysis</span></a>
+                </li>
+                <li class="sidebar-list-item">
                     <a href="product_research" class="sidebar-link text-muted "><img src="{% static 'img/magnifying-glass.png' %}" alt="" class="mr-3" width="30" height="30"><span>Product Research</span></a>
                 </li>
                 <li class="sidebar-list-item">
@@ -111,23 +114,19 @@
                         </td>
                     </tr>
                 </table>
-                
+
                 <h6>Sales</h6>
                 <div>
-                    {% autoescape off %}
-                    {{ sales_chart }}
-                    {% endautoescape %}
+                    {% autoescape off %} {{ sales_chart }} {% endautoescape %}
                 </div>
                 {% endif %}
                 <p>{{ sales_record }}</p>
 
-                
+
                 {% if review_chart %}
                 <h6>Reviews</h6>
                 <div>
-                    {% autoescape off %}
-                    {{ review_chart }}
-                    {% endautoescape %}
+                    {% autoescape off %} {{ review_chart }} {% endautoescape %}
                 </div>
                 {% endif %}
                 <p>{{ review_record }}</p>

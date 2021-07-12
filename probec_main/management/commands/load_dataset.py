@@ -12,7 +12,7 @@ class Command(BaseCommand):
             objects_exist= Product.objects.all()
             if objects_exist:
               objects_exist.delete()
-            csvfile = open('C:/Users/tassa/OneDrive - Higher Education Commission/fyp/probec/firstproject/dataset/next_week_sales.csv', 'r')
+            csvfile = open('dataset/next_week_sales_final.csv', 'r')
             reader= csv.DictReader(csvfile) 
             for ele in reader:
               product= Product.objects.create(
@@ -21,8 +21,9 @@ class Command(BaseCommand):
                 brand=ele['brand'],
                 categories=ele['categories'], 
                 price=round(float(ele['Price']),2), 
-                sales=round(float(ele['sales']),2), 
-                revenue=round((float(ele['sales']))* float((ele['Price'])),3))
+                sales=round(float(ele['sales']),0), 
+                revenue=round((float(ele['sales']))* float((ele['Price'])),3),
+                rating= int(ele['reviews_rating']))
               products.append(product)
         except:
             raise CommandError('Initialization failed.')

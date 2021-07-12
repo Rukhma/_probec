@@ -70,5 +70,15 @@ def make_graph_c(_x):
     return data
 
 
-    
+def get_graph_data(_x):
+    df = pd.read_csv('C:/Users/tassa/Desktop/firstproject/dataset/fyp_current_sales_dataset.csv')
+    df['date'] = pd.to_datetime(df['date'], format='%d/%m/%Y')
+    item_df = df.set_index('date')
+    item_df = item_df.loc[item_df['id'] == _x]
+    data={
+        'x' : item_df.index,
+        'y' : item_df['weekly_sales'],
+        'name' : item_df['name'][0]
+    }
+    return data
 

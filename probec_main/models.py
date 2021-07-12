@@ -9,7 +9,7 @@ class Product(models.Model):
     price = models.FloatField()
     sales = models.FloatField()
     revenue = models.FloatField()
-    #rating = models.IntegerField()
+    rating = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-sales']
