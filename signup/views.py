@@ -5,14 +5,13 @@ from django.contrib import messages
 from probec_main import views
 
 
-# Create your views here.
-
 def signin(request):
     if request.method == 'POST':
         try:
             userDetails=Userreg.objects.get(email=request.POST['email'], password=request.POST['password'])
             request.session['username']=userDetails.username
             return render(request, 'dashboard.html')
+
         except Userreg.DoesNotExist as e:
             messages.warning(request,"Invalid credentials")
             return render(request, 'signin.html')

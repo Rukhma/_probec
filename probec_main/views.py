@@ -1,3 +1,4 @@
+from firstproject.settings import IS_FBLOGIN
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib import messages
@@ -10,10 +11,13 @@ from django.db.models import Sum, Count
 
 # Create your views here.
 
+
 def dashboard(request):
 
   if request.session.has_key('username'):
     username = request.session['username']
+    return render(request,'dashboard.html', {'user': username})
+  elif (request.user):
     return render(request,'dashboard.html')
   else:
     messages.warning(request,"Please Sign in first")
@@ -24,20 +28,27 @@ def dashboard(request):
 
 
 def product_research(request):
-
-    if request.session.has_key('username'):
-      username = request.session['username']
-
-      data={
-        'average_sales' : 0.0,
-        'average_price' : 0.0,
-        'average_revenue' :0.0,
-        'average_rating' :0.0
-      }
-      return render(request, 'productresearch.html', data)
-    else:
-      messages.warning(request,"Please Sign in first")
-      return render(request,'signin.html')
+  if request.session.has_key('username'):
+    username = request.session['username']
+    data={
+          'average_sales' : 0.0,
+          'average_price' : 0.0,
+          'average_revenue' :0.0,
+          'average_rating' :0.0,
+          'user': username
+        }
+    return render(request, 'productresearch.html', data)
+  elif (request.user):
+    data={
+          'average_sales' : 0.0,
+          'average_price' : 0.0,
+          'average_revenue' :0.0,
+          'average_rating' :0.0
+        }
+    return render(request,'productresearch.html', data)
+  else:
+    messages.warning(request,"Please Sign in first")
+    return render(request,'signin.html')
 
 
 
@@ -144,12 +155,14 @@ def searchptrack(request):
 
 
 def product_tracking(request):
-    if request.session.has_key('username'):
-      username = request.session['username']
-      return render(request, 'product_tracking.html')
-    else:
-      messages.warning(request,"Please Sign in first")
-      return render(request,'signin.html')
+  if request.session.has_key('username'):
+    username = request.session['username']
+    return render(request, 'product_tracking.html' , {'user': username})
+  elif (request.user):
+    return render(request,'product_tracking.html')
+  else:
+    messages.warning(request,"Please Sign in first")
+    return render(request,'signin.html')
 
 
 
@@ -157,12 +170,14 @@ def product_tracking(request):
 
 
 def comaprison(request):
-    if request.session.has_key('username'):
-      username = request.session['username']
-      return render(request, 'comparison.html')
-    else:
-      messages.warning(request,"Please Sign in first")
-      return render(request,'signin.html')
+  if request.session.has_key('username'):
+    username = request.session['username']
+    return render(request, 'comparison.html', {'user': username})
+  elif (request.user):
+    return render(request,'comparison.html')
+  else:
+    messages.warning(request,"Please Sign in first")
+    return render(request,'signin.html')
 
 
 
@@ -189,7 +204,14 @@ def plot_graph(request):
 
 
 def market_analysis(request):
-  return render(request,'market analysis.html')
+  if request.session.has_key('username'):
+    username = request.session['username']
+    return render(request,'market analysis.html',  {'user': username})
+  elif (request.user):
+    return render(request,'market analysis.html')
+  else:
+    messages.warning(request,"Please Sign in first")
+    return render(request,'signin.html')
 
 def select_analysis(request):
   option = request.GET.get('options','').lower()
@@ -197,9 +219,9 @@ def select_analysis(request):
   if option == "categories":
     result=(Product.objects.values('categories').annotate(pro_count=Count('name'), brand_count=Count('brand'), sales_sum=Sum('sales')).order_by('-sales_sum')[:10])
   elif option == "products":
-    result=(Product.objects.values('name', 'sales').annotate(sales_sum=Sum('sales')).order_by('-sales_sum')[:10])
+    result=(Product.objects.values('name').annotate(sales_sum=Sum('sales')).order_by('-sales_sum')[:10])
   elif option == "brands":
-    result=(Product.objects.values('brand', 'sales').annotate(pro_count=Count('name'), sales_sum=Sum('sales')).order_by('-sales_sum')[:10])
+    result=(Product.objects.values('brand').annotate(pro_count=Count('name'), sales_sum=Sum('sales')).order_by('-sales_sum')[:10])
   
   return render(request,'market analysis.html', {'result': result, 'option':option})
   

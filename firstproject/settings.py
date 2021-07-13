@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.redirects',
+
+    #step1 for fb login
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+
+    #step2 fb login
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <-- Here
 ]
 
 ROOT_URLCONF = 'firstproject.urls'
@@ -68,10 +74,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                #step3 fb login
+                'social_django.context_processors.backends',  # <-- Here
+                'social_django.context_processors.login_redirect', # <-- Here
             ],
         },
     },
 ]
+
+#step4 fb login
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 WSGI_APPLICATION = 'firstproject.wsgi.application'
 
@@ -126,6 +145,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+#step6 fb login
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/dashboard'
+IS_FBLOGIN = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -136,3 +160,8 @@ STATICFILES_DIRS=[
 ]
 #put these assets in django 
 STATIC_ROOT=os.path.join(BASE_DIR,'assets')
+
+
+#step7 fb login
+SOCIAL_AUTH_FACEBOOK_KEY = '871248907070873'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'b0afa882d621bed8c71588eaa3d7c702'  # App Secret

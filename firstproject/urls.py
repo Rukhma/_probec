@@ -20,5 +20,8 @@ urlpatterns = [
     path('',include('signup.urls')),
     path('',include('homepage.urls')),
     path('',include('probec_main.urls')),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+
+    #step5 fb login
+    path('oauth/', include('social_django.urls', namespace='social')),  # <-- here
 ]

@@ -101,12 +101,49 @@ body {
 }
 
 .toast-custom {
-    background-color: #dee2e6;
+    background-color: #d8dadb;
     border: none;
     -webkit-box-shadow: 0 0.125rem 0.8rem rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0.125rem 0.8rem rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 1rem 0.8rem 3px #e9eaea;
     margin-top: 2rem;
     border-radius: 0rem;
+}
+
+.heading-animation1 {
+    animation-name: h_animation1;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    animation-fill-mode: both;
+}
+
+@keyframes h_animation1 {
+    0% {
+        width: 0ch
+    }
+    100% {
+        width: 28ch;
+    }
+}
+
+.heading-animation2 {
+    animation-name: h_animation2;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-delay: 2s;
+    overflow: hidden;
+    white-space: nowrap;
+    animation-fill-mode: both;
+}
+
+@keyframes h_animation2 {
+    0% {
+        width: 0ch
+    }
+    100% {
+        width: 28ch;
+    }
 }
 
 #pd-menu {
@@ -192,4 +229,24 @@ body {
 
 input[type=number] {
     width: 100%;
+}
+
+.card {
+    background-color: lightgrey;
+    border: none;
+    -webkit-box-shadow: 0 0.125rem 0.8rem rgb(0 0 0 / 10%);
+    box-shadow: 0 0.125rem 0.8rem rgb(0 0 0 / 10%);
+    border-radius: 0rem;
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    padding: .5rem .75rem;
+    color: #000000;
+    background-color: inherit;
+    background-clip: padding-box;
+    border-bottom: 0px;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
 }

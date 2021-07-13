@@ -73,14 +73,14 @@
             </ul>
         </div>
 
-        <div class="page-holder w-100 d-flex flex-wrap" style="margin-left: 7rem;">
+        <div class="page-holder w-100 d-flex flex-wrap" style="margin-left: 7rem; align-content: flex-start">
             <header class="header w-100 pb-1 mb-0" style="height:fit-content;">
                 <nav class="navbar  px-4 py-2 bg-white shadow">
                     <a href="dashboard" class="navbar-brand"> <img src="{% static 'img/logo.png' %}" alt="" class="img-fluid logo" width="103" height="76"></a>
                     <ul class="ml-auto d-flex align-items-center list-unstyled mb-0">
                         <li class="nav-item dropdown ml-auto">
                             <a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="{% static 'img/user icon.png' %}" alt="Jason Doe" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
-                            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ request.session.username}}</strong></a>
+                            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ user}}</strong></a>
                                 <div class="dropdown-divider"></div><a href="signin" class="dropdown-item">Logout</a>
                             </div>
                         </li>
@@ -167,7 +167,7 @@
                     </div>
                     <button type="submit" class="btn btn-success mt-3 mb-0">Get Products</button>
                 </form>
-                <div class="row">
+                <div class="row pt-3">
                     <div class="col-lg-3 col-md-3 col-sm-12">
                         <div class="card">
                             <div class="card-body">

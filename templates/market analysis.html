@@ -25,6 +25,17 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <!-- Font awesome-->
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
+    <style>
+        .btn-success {
+            background-color: #78afe6;
+            color: #CCE0F4;
+        }
+        
+        .btn-success:hover {
+            background-color: #4499ee;
+            border-color: #4499ee;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,14 +67,14 @@
                 </li>
             </ul>
         </div>
-        <div class="page-holder w-100 d-flex flex-wrap" style="margin-left: 7rem;">
+        <div class="page-holder w-100 d-flex flex-wrap" style="margin-left: 7rem; align-content: flex-start;">
             <header class="header w-100" style="height:fit-content;">
                 <nav class=" navbar px-4 py-2 bg-white shadow ">
                     <a href="dashboard " class="navbar-brand "> <img src="{% static 'img/PROBEC.png' %} " alt=" " class="img-fluid logo " width="103 " height="76 "></a>
                     <ul class="ml-auto d-flex align-items-center list-unstyled mb-0 ">
                         <li class="nav-item dropdown ml-auto">
                             <a id="userInfo" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><img src="{% static 'img/user icon.png' %}" style="max-width: 2.5rem;" class="img-fluid rounded-circle shadow"></a>
-                            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ request.session.username }}</strong></a>
+                            <div aria-labelledby="userInfo" class="dropdown-menu"><a href="#" class="dropdown-item"><strong class="d-block text-uppercase headings-font-family">{{ user }}</strong></a>
                                 <div class="dropdown-divider"></div><a href="signin" class="dropdown-item">Logout</a>
                             </div>
                         </li>
@@ -140,6 +151,7 @@
 
                                 {% if option in "brands " %}
                                 <tbody>
+                 
                                     {% for row in result %}
                                     <tr>
                                         <td scope="col ">{{ row.brand }}</td>
