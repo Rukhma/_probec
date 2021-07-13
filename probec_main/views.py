@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib import messages
 from probec_main.models import Product
-from .utils import get_reviews_plot, search_reviews,search_file, make_graph, make_graph_c, get_graph_data
+from .utils import get_reviews_plot, search_reviews,search_file, make_graph, make_graph_c, get_graph_data,get_bar_graph
 from django.core.paginator import Paginator 
 from plotly.offline import plot
 from django.db.models import Sum, Count
@@ -68,9 +68,10 @@ def search(request):
   filtered_pro=[]
   average_sales=0.0
   average_price=0.0
-  average_revenue =0.0
   average_rating =0.0
-
+  competition_score =""
+  count=0
+  result=list((Product.objects.values('name', 'sales').annotate(sales_sum=Sum('sales')).order_by('-sales_sum')[:10]))
   #searching and calculating average
   all_products= Product.objects.all()
   for item in all_products :
@@ -78,9 +79,16 @@ def search(request):
       filtered_pro.append(item)
       average_sales += float(item.sales)
       average_price += float(item.price)
-      average_revenue += float(item.revenue) 
       average_rating += float(item.rating)
-
+      #for competition analysis
+      for element in result:
+        if item.name.lower() in element['name'].lower():
+          count = count+1
+  print(count)
+  if count==0:
+    competition_score="Low"
+  elif count>=1:
+    competition_score="High"
   
   pro_paginator = Paginator(filtered_pro, 5)
   page_num =  request.GET.get('page') if not  request.GET.get('page') == '' else 1 
@@ -91,7 +99,6 @@ def search(request):
   else:
     average_sales /= len(filtered_pro)
     average_price /= len(filtered_pro)
-    average_revenue /= len(filtered_pro)
     average_rating /= len(filtered_pro)
 
   context = {
@@ -100,8 +107,8 @@ def search(request):
       'record': record, 
       'average_sales':round(average_sales, 3), 
       'average_price':round(average_price,3), 
-      'average_revenue':round(average_revenue,1),
-      'average_rating' : round(average_rating,1)
+      'average_rating' : round(average_rating,1),
+      'competition_score': competition_score
   }
 
   return render(request, 'productresearch.html', context)
@@ -166,21 +173,6 @@ def product_tracking(request):
 
 
 
-
-
-
-def comaprison(request):
-  if request.session.has_key('username'):
-    username = request.session['username']
-    return render(request, 'comparison.html', {'user': username})
-  elif (request.user):
-    return render(request,'comparison.html')
-  else:
-    messages.warning(request,"Please Sign in first")
-    return render(request,'signin.html')
-
-
-
 def plot_graph(request):
 
   sales_record=''
@@ -225,3 +217,141 @@ def select_analysis(request):
   
   return render(request,'market analysis.html', {'result': result, 'option':option})
   
+
+  #COMPARISON
+def search_comparison(request):
+  pro_f = request.GET.get('pro_f').lower()
+  pro_s=request.GET.get('pro_s').lower()
+  record =''
+  filtered_pro_f=[]
+  filtered_pro_s=[]
+  average_sales_f=0.0
+  average_price_f=0.0
+  average_revenue_f =0.0
+  average_sales_s=0.0
+  average_price_s=0.0
+  average_revenue_s =0.0
+  total_prod_f=0.0
+  total_prod_s=0.0
+  total_brand_f=0.0
+  total_brand_s=0.0
+  average_rating_f =0.0
+  average_rating_s =0.0
+  brands_f=[]
+  brands_s=[]
+  all_products= Product.objects.all()
+  #searching and calculating average for first product
+
+  for item in all_products :
+    if pro_f.lower() in item.name.lower():
+      filtered_pro_f.append(item)
+      average_sales_f += float(item.sales)
+      average_price_f += float(item.price)
+      average_revenue_f += float(item.revenue)
+      average_rating_f += float(item.rating)
+      if item.brand not in brands_f:
+        brands_f.append(item.brand)
+        total_brand_f = total_brand_f + 1
+      
+      
+  #searching and calculating average for second product
+
+  for item in all_products :
+    if pro_s.lower() in item.name.lower():
+      filtered_pro_s.append(item)
+      average_sales_s += float(item.sales)
+      average_price_s += float(item.price)
+      average_revenue_s += float(item.revenue)
+      average_rating_s += float(item.rating)  
+      if item.brand not in brands_s:
+        brands_s.append(item.brand)
+        total_brand_s = total_brand_s + 1
+
+  if not filtered_pro_f and not filtered_pro_s:
+    record= 'Record of first product not found'
+  elif not filtered_pro_s:
+    record='Record of second product not found'
+  elif not filtered_pro_f:
+    record='Record of both products not found'
+  else:
+    average_sales_f /= len(filtered_pro_f)
+    average_price_f /= len(filtered_pro_f)
+    average_revenue_f /= len(filtered_pro_f)
+    average_sales_s /= len(filtered_pro_s)
+    average_price_s /= len(filtered_pro_s)
+    average_revenue_s /= len(filtered_pro_s)
+    average_rating_f /=len(filtered_pro_f)
+    average_rating_s /= len(filtered_pro_s)
+    total_prod_f = len(filtered_pro_f)
+    total_prod_s = len(filtered_pro_s)
+
+  context = {
+      'record': record, 
+      'average_sales_f':round(average_sales_f, 3), 
+      'average_price_f':round(average_price_f,3), 
+      'average_revenue_f':round(average_revenue_f,1),
+      'average_sales_s':round(average_sales_s, 3), 
+      'average_price_s':round(average_price_s,3), 
+      'average_revenue_s':round(average_revenue_s,1),
+      'total_prod_f':total_prod_f,
+      'total_prod_s':total_prod_s,
+      'total_brand_f':total_brand_f,
+      'total_brand_s':total_brand_s,
+      'product_f':pro_f,
+      'product_s': pro_s,
+      'average_rating_f':round(average_rating_f,1),
+      'average_rating_s':round(average_rating_s,1)
+  }
+  return render(request, 'comparison.html', context)      
+  
+def comaprison(request):
+    if request.session.has_key('username'):
+      username = request.session['username']
+      average_sales_f=0.0
+      average_price_f=0.0
+      average_revenue_f =0.0
+      average_sales_s=0.0
+      average_price_s=0.0
+      average_revenue_s =0.0
+      average_rating_f =0.0
+      average_rating_s =0.0
+      total_prod_f=0.0
+      total_prod_s=0.0
+      total_brand_f=0.0
+      total_brand_s=0.0
+      product_f="First Product"
+      product_s="Second Product"
+      return render(request, 'comparison.html', {'average_sales_f':average_sales_f, 'average_price_f':average_price_f, 
+      'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
+      'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
+      'total_prod_s':total_prod_s,'total_brand_f':total_brand_f,'total_brand_s':total_brand_s,'average_rating_f':average_rating_f,'average_rating_s':average_rating_s})      
+
+    else:
+      messages.warning(request,"Please Sign in first")
+      return render(request,'signin.html')
+
+def plot_graph_bar(request):
+
+  sales_record=''
+  layout = {
+        'title': 'Sales',
+        'xaxis_title': 'Date',
+        'yaxis_title': 'Sales',
+        'height' : 450,
+        'width': 750
+      }
+  print(request.GET.get('value_f'))
+  price_s=0.0
+  price_f=0.0
+  price_f = float(request.GET.get('value_f'))
+  price_s = float(request.GET.get('value_s'))
+  print(price_f)
+  print(price_s)
+  n1=request.GET.get('name_f')
+  n2=request.GET.get('name_s')
+  g_name=request.GET.get('g_name')
+  price_chart=get_bar_graph(price_f,price_s,n1,n2,g_name)
+  plot_div = plot({'data': price_chart['fig'], 'layout': layout}, output_type='div')
+  return JsonResponse({'result': plot_div,'name':g_name,'record':sales_record}, safe=False)
+
+

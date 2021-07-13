@@ -13,6 +13,8 @@ urlpatterns=[
     path('searchptrack',views.searchptrack, name='searchptrack'),
     path('plot_graph',views.plot_graph, name='plot_graph'),
     path('market_analysis', views.market_analysis, name="market_analysis"),
-    path('select_analysis',views.select_analysis, name='select_analysis')
+    path('select_analysis',views.select_analysis, name='select_analysis'),
+    path('search_comparison',views.search_comparison, name='search_comparison'),
+    path('plot_graph_bar',views.plot_graph_bar, name='plot_graph_bar'),    
 ]
 

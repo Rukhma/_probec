@@ -82,3 +82,16 @@ def get_graph_data(_x):
     }
     return data
 
+
+#for creating graphs on comparison feature
+def get_bar_graph(x1,x2,n1,n2,name):
+    labelx=[n1,n2]
+    fig=go.Figure(data=[
+    go.Bar(name='avg_f', x=labelx, y=[x1, x2]),
+])
+    fig.update_layout(barmode='group')
+    data={
+        "fig": fig,
+        "name": name
+    }
+    return data
