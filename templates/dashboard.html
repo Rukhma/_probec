@@ -104,10 +104,10 @@
 
                 </div>
 
-                <div class="toast show mr-5 mt-5 w-50 toast-custom" id="myToast2 " role="alert " aria-live="assertive " aria-atomic="true ">
+                <div class="toast show mr-5 mt-5 w-50 toast-custom" id="myToast3 " role="alert " aria-live="assertive " aria-atomic="true ">
                     <div class="toast-header p-3 ">
                         <h6 class="me-auto ">Market Analysis</h6>
-                        <button type="button " class="btn-close " id="btn2 " data-bs-dismiss="toast " aria-label="Close "></button>
+                        <button type="button " class="btn-close " id="btn3" data-bs-dismiss="toast " aria-label="Close "></button>
                     </div>
                     <div class="toast-body p-3 ">
                         <p>This tool will help you to have a look at top 10 categories, brands and products of the week. It will display weekly sales data of the top 10 categories, brands or products. With the help of this tool you can easily identify that
@@ -120,10 +120,10 @@
                 <div class="row ">
                     
                     <div class="col-sm-6 ">-->
-                <div id="myToast3" class="toast show mr-5 mt-5 w-50 toast-custom" role="alert " aria-live="assertive " aria-atomic="true ">
+                <div id="myToast4" class="toast show mr-5 mt-5 w-50 toast-custom" role="alert " aria-live="assertive " aria-atomic="true ">
                     <div class="toast-header p-3">
                         <h6 class="me-auto ">Comparative Analysis</h6>
-                        <button type="button " class="btn-close " id="btn3 " data-bs-dismiss="toast " aria-label="Close "></button>
+                        <button type="button " class="btn-close " id="btn4 " data-bs-dismiss="toast " aria-label="Close "></button>
                     </div>
                     <div class="toast-body p-3 ">
                         <p>You can decide after looking at the analysis that for which product you should go. This tool will show you a comparative analysis between 2 products either in tabular or graphical form, as per your choice.</p>
@@ -142,14 +142,19 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js "></script>
     <script>
-        $("#btn1").click(function() {
-            $("#myToast1 ").toast('hide');
-        });
-        $("#btn2").click(function() {
-            $("#myToast2 ").toast('hide');
-        });
-        $("#btn3").click(function() {
-            $("#myToast3 ").toast('hide');
+        $(document).ready(function(e) {
+            $("#btn1").click(function() {
+                $("#myToast1").toast("hide");
+            });
+            $("#btn2").click(function() {
+                $("#myToast2").toast("hide");
+            });
+            $("#btn3").click(function() {
+                $("#myToast3").toast("hide");
+            });
+            $("#btn4").click(function() {
+                $("#myToast4").toast("hide");
+            });
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js " integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p " crossorigin="anonymous "></script>

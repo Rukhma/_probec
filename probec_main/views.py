@@ -35,6 +35,7 @@ def product_research(request):
           'average_price' : 0.0,
           'average_revenue' :0.0,
           'average_rating' :0.0,
+          'competition_score': "High/Low",
           'user': username
         }
     return render(request, 'productresearch.html', data)
@@ -305,31 +306,34 @@ def search_comparison(request):
   return render(request, 'comparison.html', context)      
   
 def comaprison(request):
-    if request.session.has_key('username'):
-      username = request.session['username']
-      average_sales_f=0.0
-      average_price_f=0.0
-      average_revenue_f =0.0
-      average_sales_s=0.0
-      average_price_s=0.0
-      average_revenue_s =0.0
-      average_rating_f =0.0
-      average_rating_s =0.0
-      total_prod_f=0.0
-      total_prod_s=0.0
-      total_brand_f=0.0
-      total_brand_s=0.0
-      product_f="First Product"
-      product_s="Second Product"
-      return render(request, 'comparison.html', {'average_sales_f':average_sales_f, 'average_price_f':average_price_f, 
-      'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
-      'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
-      'total_prod_s':total_prod_s,'total_brand_f':total_brand_f,'total_brand_s':total_brand_s,'average_rating_f':average_rating_f,'average_rating_s':average_rating_s})      
-
-    else:
-      messages.warning(request,"Please Sign in first")
-      return render(request,'signin.html')
-
+  average_sales_f=0.0
+  average_price_f=0.0
+  average_revenue_f =0.0
+  average_sales_s=0.0
+  average_price_s=0.0
+  average_revenue_s =0.0
+  average_rating_f =0.0
+  average_rating_s =0.0
+  total_prod_f=0.0
+  total_prod_s=0.0
+  total_brand_f=0.0
+  total_brand_s=0.0
+  product_f="First Product"
+  product_s="Second Product"
+  if request.session.has_key('username'):
+    username = request.session['username']
+    return render(request, 'comparison.html', {'average_sales_f':average_sales_f, 'average_price_f':average_price_f, 
+    'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
+    'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
+    'total_prod_s':total_prod_s,'total_brand_f':total_brand_f,'total_brand_s':total_brand_s,'average_rating_f':average_rating_f,'average_rating_s':average_rating_s, 'user':username})      
+  elif (request.user):
+    return render(request, 'comparison.html', {'average_sales_f':average_sales_f, 'average_price_f':average_price_f, 
+    'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
+    'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
+    'total_prod_s':total_prod_s,'total_brand_f':total_brand_f,'total_brand_s':total_brand_s,'average_rating_f':average_rating_f,'average_rating_s':average_rating_s})
+  else:
+    messages.warning(request,"Please Sign in first")
+    return render(request,'signin.html')
 def plot_graph_bar(request):
 
   sales_record=''
