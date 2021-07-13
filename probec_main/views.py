@@ -17,7 +17,7 @@ def dashboard(request):
   if request.session.has_key('username'):
     username = request.session['username']
     return render(request,'dashboard.html', {'user': username})
-  elif (request.user):
+  elif not request.user.is_anonymous:
     return render(request,'dashboard.html')
   else:
     messages.warning(request,"Please Sign in first")
@@ -39,12 +39,13 @@ def product_research(request):
           'user': username
         }
     return render(request, 'productresearch.html', data)
-  elif (request.user):
+  elif (not request.user.is_anonymous):
     data={
           'average_sales' : 0.0,
           'average_price' : 0.0,
           'average_revenue' :0.0,
-          'average_rating' :0.0
+          'average_rating' :0.0,
+          'competition_score': "High/Low",
         }
     return render(request,'productresearch.html', data)
   else:
@@ -166,7 +167,7 @@ def product_tracking(request):
   if request.session.has_key('username'):
     username = request.session['username']
     return render(request, 'product_tracking.html' , {'user': username})
-  elif (request.user):
+  elif (not request.user.is_anonymous):
     return render(request,'product_tracking.html')
   else:
     messages.warning(request,"Please Sign in first")
@@ -200,7 +201,7 @@ def market_analysis(request):
   if request.session.has_key('username'):
     username = request.session['username']
     return render(request,'market analysis.html',  {'user': username})
-  elif (request.user):
+  elif (not request.user.is_anonymous):
     return render(request,'market analysis.html')
   else:
     messages.warning(request,"Please Sign in first")
@@ -326,7 +327,7 @@ def comaprison(request):
     'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
     'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
     'total_prod_s':total_prod_s,'total_brand_f':total_brand_f,'total_brand_s':total_brand_s,'average_rating_f':average_rating_f,'average_rating_s':average_rating_s, 'user':username})      
-  elif (request.user):
+  elif (not request.user.is_anonymous):
     return render(request, 'comparison.html', {'average_sales_f':average_sales_f, 'average_price_f':average_price_f, 
     'average_revenue_f':average_revenue_f,'average_sales_s':average_sales_s, 'average_price_s':average_price_s, 
     'average_revenue_s':average_revenue_s,'product_f':product_f,'product_s': product_s,'total_prod_f':total_prod_f,
@@ -334,6 +335,8 @@ def comaprison(request):
   else:
     messages.warning(request,"Please Sign in first")
     return render(request,'signin.html')
+
+
 def plot_graph_bar(request):
 
   sales_record=''
